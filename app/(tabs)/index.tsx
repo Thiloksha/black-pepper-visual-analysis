@@ -12,6 +12,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StatusBar,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLanguage } from "../../components/context/LanguageContext";
@@ -59,10 +60,7 @@ export default function HomeScreen() {
     setResult(null);
 
     // --- DEMO MODE START ---
-    // Instead of calling the real server, we simulate a delay and return a fake result.
-
     setTimeout(() => {
-      //  Pick a random variety to make it look real
       const mockVarieties = [
         { class: "dingirala", confidence: "98.5%" },
         { class: "bootawe", confidence: "96.2%" },
@@ -71,35 +69,11 @@ export default function HomeScreen() {
       const randomResult =
         mockVarieties[Math.floor(Math.random() * mockVarieties.length)];
 
-      //  Set the result
       setResult(randomResult);
-
-      //  Save to history so that feature works too
       saveToHistory(randomResult, uri);
-
-      //  Stop loading
       setLoading(false);
-    }, 2500); // Wait 2.5 seconds to simulate "Thinking..."
-
+    }, 2500);
     // --- DEMO MODE END ---
-
-    /* // REAL BACKEND CODE (Keep this commented out for the demo)
-    const formData = new FormData();
-    // @ts-ignore
-    formData.append("file", { uri: uri, name: "leaf.jpg", type: "image/jpeg" });
-
-    try {
-      const response = await axios.post(API_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setResult(response.data);
-      saveToHistory(response.data, uri);
-    } catch (error) {
-      Alert.alert("Error", "Backend not connected.");
-    } finally {
-      setLoading(false);
-    }
-    */
   };
 
   const pickImage = async (useCamera: boolean) => {
@@ -114,7 +88,6 @@ export default function HomeScreen() {
     } else {
       result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-
         aspect: [1, 1],
         quality: 1,
       });
@@ -123,126 +96,152 @@ export default function HomeScreen() {
     if (!result.canceled) processImage(result.assets[0].uri);
   };
 
-  // Helper to get number from string "98.5%" -> 98.5
-  const getConfidenceValue = (confStr: string) => {
-    return parseFloat(confStr.replace("%", "")) || 0;
+  //  Get the correct name based on language ---
+  const getDisplayVariety = (rawClass: string) => {
+    const key = rawClass.toLowerCase();
+    
+    // Check which variety it is and return the translated name from Context
+    if (key.includes("dingirala")) {
+        return t.varietyDetails.dingirala.name.toUpperCase();
+    }
+    if (key.includes("bootawe")) {
+        return t.varietyDetails.bootawe.name.toUpperCase();
+    }
+    // Note: Model says "kohukuburerala", Context says "kohu"
+    if (key.includes("kohu")) {
+        return t.varietyDetails.kohu.name.toUpperCase();
+    }
+
+    // Fallback if unknown
+    return rawClass.toUpperCase();
   };
 
   if (splashVisible) {
     return (
       <View style={styles.splashContainer}>
-        <Ionicons name="leaf" size={100} color="white" />
+        <StatusBar barStyle="light-content" />
+        <View style={styles.splashIconCircle}>
+            <Ionicons name="leaf" size={80} color="#2E7D32" />
+        </View>
         <Text style={styles.splashText}>Black Pepper AI</Text>
-        <ActivityIndicator
-          size="large"
-          color="white"
-          style={{ marginTop: 20 }}
-        />
+        <Text style={styles.splashSubText}>Research Assistant</Text>
+        <ActivityIndicator size="large" color="white" style={{ marginTop: 40 }} />
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F4F6F8" }}>
-      <ScrollView
-        contentContainerStyle={[
-          styles.scrollContainer,
-          { paddingTop: insets.top + 20, paddingBottom: 100 },
-        ]}
-      >
-        {/* HEADER */}
-        <View style={styles.header}>
-          <View style={{ flex: 1, marginRight: 10 }}>
-            {/* Added flex: 1 and margin so text wraps instead of pushing the icon */}
-            <Text style={styles.welcomeText}>Welcome Researcher,</Text>
-            <Text style={styles.title}>{t.appTitle}</Text>
-          </View>
-          <View style={styles.avatarPlaceholder}>
-            <Ionicons name="person" size={20} color="white" />
-          </View>
-        </View>
-
-        {/* MAIN IMAGE CARD */}
-        <View style={styles.card}>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.preview} />
-          ) : (
-            <TouchableOpacity
-              style={styles.placeholder}
-              onPress={() => setModalVisible(true)}
-            >
-              <View style={styles.iconCircle}>
-                <Ionicons name="scan-outline" size={40} color="#2E7D32" />
-              </View>
-              <Text style={styles.placeholderText}>Tap to Scan Leaf</Text>
-              <Text style={styles.placeholderSubText}>Camera or Gallery</Text>
+    <View style={styles.mainContainer}>
+      <StatusBar barStyle="dark-content" />
+      
+      {/* HEADER BACKGROUND */}
+      <View style={[styles.headerBg, { paddingTop: insets.top }]}>
+        <View style={styles.headerContent}>
+            <View>
+                <Text style={styles.welcomeLabel}>Welcome,</Text>
+                <Text style={styles.researcherName}>Research Partner</Text>
+            </View>
+            <TouchableOpacity style={styles.profileBtn}>
+                <Ionicons name="person" size={20} color="#2E7D32" />
             </TouchableOpacity>
-          )}
+        </View>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* APP TITLE CARD */}
+        <View style={styles.titleCard}>
+            <Text style={styles.appTitle}>{t.appTitle}</Text>
+            <Text style={styles.appDesc}>AI-Powered Identification System</Text>
         </View>
 
-        {/* LOADING INDICATOR */}
+        {/* MAIN IMAGE SCANNER AREA */}
+        <View style={styles.scannerContainer}>
+            <View style={styles.scannerCard}>
+            {image ? (
+                <Image source={{ uri: image }} style={styles.preview} />
+            ) : (
+                <TouchableOpacity
+                style={styles.placeholder}
+                onPress={() => setModalVisible(true)}
+                >
+                <View style={styles.dashedCircle}>
+                    <Ionicons name="camera-outline" size={40} color="#2E7D32" />
+                </View>
+                <Text style={styles.placeholderText}>Tap to Analyze Leaf</Text>
+                </TouchableOpacity>
+            )}
+            </View>
+            {/* Decorative corners for "Scanner" look */}
+            <View style={[styles.corner, styles.tl]} />
+            <View style={[styles.corner, styles.tr]} />
+            <View style={[styles.corner, styles.bl]} />
+            <View style={[styles.corner, styles.br]} />
+        </View>
+
+        {/* LOADING STATE */}
         {loading && (
-          <View style={styles.loadingContainer}>
+          <View style={styles.loadingCard}>
             <ActivityIndicator size="large" color="#2E7D32" />
-            <Text style={styles.loadingText}>Analyzing Leaf Features...</Text>
+            <Text style={styles.loadingText}>Extracting Features...</Text>
+            <Text style={styles.loadingSubText}>Analyzing vein patterns & morphology</Text>
           </View>
         )}
 
-        {/* RESULT CARD */}
+        {/* ANALYSIS REPORT CARD */}
         {result && !loading && (
           <View style={styles.resultCard}>
             <View style={styles.resultHeader}>
-              <Ionicons name="checkmark-circle" size={24} color="#2E7D32" />
-              <Text style={styles.resultTitle}>Analysis Complete</Text>
+              <View style={styles.resultBadge}>
+                <Ionicons name="checkmark-sharp" size={16} color="white" />
+                <Text style={styles.resultBadgeText}>CONFIRMED</Text>
+              </View>
+              <Text style={styles.timestamp}>{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
             </View>
 
             <View style={styles.divider} />
 
-            <Text style={styles.varietyLabel}>{t.variety}</Text>
-            <Text style={styles.varietyName}>{result.class.toUpperCase()}</Text>
+            <Text style={styles.label}>{t.variety}</Text>
+            
+            {/* --- UPDATED: Uses the helper function to show English/Sinhala correctly --- */}
+            <Text style={styles.varietyName}>{getDisplayVariety(result.class)}</Text>
 
-            {/* Visual Confidence Bar */}
-            <View style={styles.confidenceContainer}>
-              <View style={styles.confidenceRow}>
-                <Text style={styles.confidenceLabel}>{t.confidence}</Text>
-                <Text style={styles.confidenceValue}>{result.confidence}</Text>
-              </View>
-              <View style={styles.progressBarBg}>
-                <View
-                  style={[
-                    styles.progressBarFill,
-                    { width: `${getConfidenceValue(result.confidence)}%` },
-                  ]}
-                />
-              </View>
+            <View style={styles.statRow}>
+                <View style={styles.statItem}>
+                    <Text style={styles.statLabel}>{t.confidence}</Text>
+                    <Text style={styles.statValue}>{result.confidence}</Text>
+                </View>
+                {/* Visual Bar */}
+                <View style={styles.progressContainer}>
+                    <View style={[styles.progressBar, { width: result.confidence }]} />
+                </View>
             </View>
 
-            <View style={styles.infoBadge}>
-              <Ionicons
-                name="information-circle-outline"
-                size={20}
-                color="#1565C0"
-              />
+            <View style={styles.infoBox}>
+              <Ionicons name="bulb-outline" size={20} color="#1565C0" />
               <Text style={styles.infoText}>
-                This variety is identified based on leaf vein patterns and
-                shape.
+                Identified based on leaf aspect ratio and vein density distinctive to Sri Lankan cultivars.
               </Text>
             </View>
           </View>
         )}
+
+        <View style={{height: 100}} /> 
       </ScrollView>
 
-      {/* FLOATING ACTION BUTTON (FAB) */}
+      {/* FAB - FLOATING ACTION BUTTON */}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => setModalVisible(true)}
-        activeOpacity={0.8}
+        activeOpacity={0.9}
       >
-        <Ionicons name="camera" size={28} color="white" />
+        <Ionicons name="scan" size={24} color="white" />
         <Text style={styles.fabText}>{t.scanBtn}</Text>
       </TouchableOpacity>
 
-      {/* SELECTION MODAL */}
+      {/* MODAL */}
       <Modal visible={modalVisible} transparent animationType="fade">
         <TouchableOpacity
           style={styles.modalOverlay}
@@ -251,29 +250,29 @@ export default function HomeScreen() {
         >
           <View style={styles.modalContent}>
             <View style={styles.modalHandle} />
-            <Text style={styles.modalTitle}>Select Image Source</Text>
+            <Text style={styles.modalTitle}>Select Input Source</Text>
 
-            <TouchableOpacity
-              style={styles.modalOption}
-              onPress={() => pickImage(true)}
-            >
-              <View style={[styles.optionIcon, { backgroundColor: "#E8F5E9" }]}>
-                <Ionicons name="camera" size={24} color="#2E7D32" />
-              </View>
-              <Text style={styles.optionText}>{t.camera}</Text>
-              <Ionicons name="chevron-forward" size={20} color="#ccc" />
-            </TouchableOpacity>
+            <View style={styles.modalRow}>
+                <TouchableOpacity
+                style={styles.modalOptionCard}
+                onPress={() => pickImage(true)}
+                >
+                <View style={[styles.iconBox, {backgroundColor: '#E8F5E9'}]}>
+                    <Ionicons name="camera" size={32} color="#2E7D32" />
+                </View>
+                <Text style={styles.optionText}>{t.camera}</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.modalOption}
-              onPress={() => pickImage(false)}
-            >
-              <View style={[styles.optionIcon, { backgroundColor: "#E3F2FD" }]}>
-                <Ionicons name="images" size={24} color="#1976D2" />
-              </View>
-              <Text style={styles.optionText}>{t.gallery}</Text>
-              <Ionicons name="chevron-forward" size={20} color="#ccc" />
-            </TouchableOpacity>
+                <TouchableOpacity
+                style={styles.modalOptionCard}
+                onPress={() => pickImage(false)}
+                >
+                <View style={[styles.iconBox, {backgroundColor: '#E3F2FD'}]}>
+                    <Ionicons name="images" size={32} color="#1976D2" />
+                </View>
+                <Text style={styles.optionText}>{t.gallery}</Text>
+                </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
@@ -289,67 +288,121 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  // Splash
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "#F5F7FA", // Light grey-blue for modern look
+  },
+  
+  // Splash Screen
   splashContainer: {
     flex: 1,
     backgroundColor: "#2E7D32",
     justifyContent: "center",
     alignItems: "center",
   },
+  splashIconCircle: {
+      width: 140,
+      height: 140,
+      borderRadius: 70,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 20,
+      elevation: 10
+  },
   splashText: {
     color: "white",
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "bold",
-    marginTop: 15,
     letterSpacing: 1,
   },
-
-  // Layout
-  scrollContainer: {
-    paddingHorizontal: 20,
+  splashSubText: {
+      color: "#A5D6A7",
+      fontSize: 16,
+      marginTop: 5,
+      fontWeight: '500'
   },
 
   // Header
-  header: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 25,
+  headerBg: {
+      backgroundColor: 'white',
+      paddingBottom: 20,
+      borderBottomLeftRadius: 30,
+      borderBottomRightRadius: 30,
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOffset: {width: 0, height: 2},
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+      zIndex: 10,
   },
-  welcomeText: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 4,
-    fontWeight: "600",
+  headerContent: {
+      paddingHorizontal: 25,
+      paddingTop: 10,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#2E7D32",
+  welcomeLabel: {
+      fontSize: 14,
+      color: '#888',
+      fontWeight: '600',
   },
-  avatarPlaceholder: {
-    width: 45,
-    height: 45,
-    borderRadius: 25,
-    backgroundColor: "#A5D6A7",
-    justifyContent: "center",
-    alignItems: "center",
+  researcherName: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#333'
+  },
+  profileBtn: {
+      width: 45,
+      height: 45,
+      borderRadius: 25,
+      backgroundColor: '#F1F8E9',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: '#C8E6C9'
   },
 
-  // Main Card (Image Preview)
-  card: {
-    width: "100%",
-    aspectRatio: 1, // Keep it square
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+
+  // App Title Card
+  titleCard: {
+      marginBottom: 25,
+      alignItems: 'center'
+  },
+  appTitle: {
+      fontSize: 22,
+      fontWeight: '800',
+      color: '#2E7D32',
+      textAlign: 'center'
+  },
+  appDesc: {
+      fontSize: 14,
+      color: '#666',
+      marginTop: 4
+  },
+
+  // Scanner Area
+  scannerContainer: {
+      position: 'relative',
+      width: '100%',
+      aspectRatio: 1,
+      marginBottom: 25,
+      padding: 10, // Space for corners
+  },
+  scannerCard: {
+    flex: 1,
     backgroundColor: "white",
-    borderRadius: 25,
-    elevation: 8, // Android shadow
-    shadowColor: "#000", // iOS shadow
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 20,
+    elevation: 4,
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
     overflow: "hidden",
-    marginBottom: 20,
   },
   preview: {
     width: "100%",
@@ -360,113 +413,148 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#F8F9FA",
   },
-  iconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#F1F8E9",
+  dashedCircle: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    borderWidth: 2,
+    borderColor: "#2E7D32",
+    borderStyle: 'dashed',
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 15,
+    backgroundColor: '#fff'
   },
   placeholderText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#555",
   },
-  placeholderSubText: {
-    fontSize: 14,
-    color: "#888",
-    marginTop: 5,
+  
+  // Decorative Corners
+  corner: {
+      position: 'absolute',
+      width: 30,
+      height: 30,
+      borderColor: '#2E7D32',
+      borderWidth: 4,
   },
+  tl: { top: 0, left: 0, borderRightWidth: 0, borderBottomWidth: 0, borderTopLeftRadius: 10 },
+  tr: { top: 0, right: 0, borderLeftWidth: 0, borderBottomWidth: 0, borderTopRightRadius: 10 },
+  bl: { bottom: 0, left: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomLeftRadius: 10 },
+  br: { bottom: 0, right: 0, borderLeftWidth: 0, borderTopWidth: 0, borderBottomRightRadius: 10 },
 
   // Loading
-  loadingContainer: {
-    alignItems: "center",
-    marginVertical: 20,
+  loadingCard: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 15,
+      alignItems: 'center',
+      elevation: 2,
+      marginBottom: 20
   },
   loadingText: {
-    marginTop: 10,
-    color: "#666",
-    fontWeight: "500",
+    marginTop: 15,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  loadingSubText: {
+      marginTop: 5,
+      color: '#888',
+      fontSize: 12
   },
 
   // Result Card
   resultCard: {
-    width: "100%",
     backgroundColor: "white",
     borderRadius: 20,
     padding: 20,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
+    elevation: 8,
+    shadowColor: "#2E7D32",
+    shadowOpacity: 0.15,
+    shadowRadius: 15,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E8F5E9'
   },
   resultHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
-  resultTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#2E7D32",
-    marginLeft: 8,
+  resultBadge: {
+      flexDirection: 'row',
+      backgroundColor: '#2E7D32',
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+      borderRadius: 8,
+      alignItems: 'center'
+  },
+  resultBadgeText: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 10,
+      marginLeft: 5
+  },
+  timestamp: {
+      color: '#999',
+      fontSize: 12
   },
   divider: {
     height: 1,
-    backgroundColor: "#f0f0f0",
-    marginVertical: 10,
+    backgroundColor: "#F1F8E9",
+    marginBottom: 15,
   },
-  varietyLabel: {
-    fontSize: 14,
-    color: "#888",
-    textTransform: "uppercase",
-    letterSpacing: 1,
+  label: {
+      fontSize: 12,
+      color: '#888',
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+      marginBottom: 5
   },
   varietyName: {
-    fontSize: 26,
+    fontSize: 32,
     fontWeight: "800",
-    color: "#333",
-    marginTop: 5,
-    marginBottom: 20,
-  },
-  confidenceContainer: {
-    marginBottom: 20,
-  },
-  confidenceRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  confidenceLabel: {
-    fontSize: 14,
-    color: "#666",
-    fontWeight: "600",
-  },
-  confidenceValue: {
-    fontSize: 14,
     color: "#2E7D32",
-    fontWeight: "bold",
+    marginBottom: 20,
   },
-  progressBarBg: {
-    height: 8,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 4,
-    overflow: "hidden",
+  statRow: {
+      marginBottom: 20
   },
-  progressBarFill: {
-    height: "100%",
-    backgroundColor: "#2E7D32",
-    borderRadius: 4,
+  statItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: 8
   },
-  infoBadge: {
+  statLabel: {
+      fontSize: 14,
+      color: '#555',
+      fontWeight: '600'
+  },
+  statValue: {
+      fontSize: 14,
+      color: '#2E7D32',
+      fontWeight: 'bold'
+  },
+  progressContainer: {
+      height: 8,
+      backgroundColor: '#E0E0E0',
+      borderRadius: 4,
+      overflow: 'hidden'
+  },
+  progressBar: {
+      height: '100%',
+      backgroundColor: '#2E7D32',
+      borderRadius: 4
+  },
+  infoBox: {
     flexDirection: "row",
     backgroundColor: "#E3F2FD",
-    padding: 12,
+    padding: 15,
     borderRadius: 12,
     alignItems: "center",
   },
@@ -475,86 +563,90 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: "#1565C0",
     fontSize: 13,
-    lineHeight: 18,
+    lineHeight: 20,
   },
 
-  // Floating Button (FAB)
+  // FAB
   fab: {
     position: "absolute",
-    bottom: 25,
+    bottom: 30,
     alignSelf: "center",
     backgroundColor: "#2E7D32",
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-    elevation: 6,
+    paddingVertical: 18,
+    paddingHorizontal: 35,
+    borderRadius: 40,
+    elevation: 10,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
-    shadowRadius: 5,
+    shadowRadius: 8,
   },
   fabText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 10,
+    letterSpacing: 0.5
   },
 
   // Modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.6)", // Darker overlay
     justifyContent: "flex-end",
   },
   modalContent: {
     backgroundColor: "white",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 25,
     paddingBottom: 40,
   },
   modalHandle: {
-    width: 40,
+    width: 50,
     height: 5,
     backgroundColor: "#E0E0E0",
     borderRadius: 3,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: 25,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: "center",
   },
-  modalOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f5f5f5",
+  modalRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: 20
   },
-  optionIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 15,
+  modalOptionCard: {
+      alignItems: 'center',
+      width: 120
+  },
+  iconBox: {
+      width: 70,
+      height: 70,
+      borderRadius: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 10
   },
   optionText: {
-    flex: 1,
-    fontSize: 16,
-    color: "#333",
-    fontWeight: "500",
+    fontSize: 15,
+    color: "#555",
+    fontWeight: "600",
   },
   cancelButton: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#f5f5f5'
   },
   cancelText: {
     color: "#FF5252",

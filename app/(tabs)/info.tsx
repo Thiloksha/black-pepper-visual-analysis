@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
+  Alert,
   ImageBackground,
   Linking,
   ScrollView,
@@ -11,12 +12,29 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLanguage } from "../../components/context/LanguageContext";
-import { router } from "expo-router"; // Import router
+import { router } from "expo-router"; 
 
 export default function InfoScreen() {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const bgImage = require("../../assets/images/background.jpg");
+
+  const openWebsite = async () => {
+    const url = "https://dea.gov.lk/";
+    try {
+      // Check if the device can open this URL
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert("Error", `Don't know how to open this URL: ${url}`);
+      }
+    } catch (error) {
+      console.error("An error occurred", error);
+      Alert.alert("Error", "Could not open the website.");
+    }
+  };
 
   return (
     <ImageBackground
@@ -50,7 +68,7 @@ export default function InfoScreen() {
 
           <TouchableOpacity
             style={styles.linkBtn}
-            onPress={() => Linking.openURL("https://dea.gov.lk/")}
+            onPress={openWebsite}
           >
             <Ionicons name="globe-outline" size={20} color="white" />
             <Text style={styles.linkText}>{t.visitGov}</Text>
