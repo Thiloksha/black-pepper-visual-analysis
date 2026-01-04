@@ -9,12 +9,17 @@ const translations = {
     camera: "Take Photo",
     gallery: "Choose from Gallery",
     cancel: "Cancel",
+    close: "Close",
     history: "Scan History",
     info: "Varieties Info",
     profile: "Profile",
     home: "Home",
     language: "Language",
     sriLankaPepper: "Black Pepper",
+    // Button Title
+    varietiesTitle: "Sri Lankan Varieties & History",
+    // The Long Description
+    varietiesLongDesc: "Although the origin of black pepper is believed to be Malabar Coast of India, Sri Lanka too is a home to a number of wild pepper types. When considering the huge genetic variability of P. nigrum L. found in Sri Lanka and the presence of pepper wild relatives, it is believed that Sri Lanka also a place of origin of pepper. Some commercial black pepper varieties had also been introduced to Sri Lanka since the existence of commercial black pepper trade. High yielding pepper line called “Panniyur-1” from India and “Kuchin” from Malaysia was introduced in the 1970s but MB12 and GK 49 are high yielding and superior quality local selections which are popular among black pepper cultivators. Department of Export Agriculture has recently introduced three new hybrids – Dingi Rala, Kohukumbure Rala and Bootawe Rala.",
     infoDesc:
       "Pepper is the most widely used spice in the world and known as “King of the Spices”. Pepper crop is native to South Asia and historical records reveal that pepper is originated in South India. Peppercorns were a much-prized trade good often referred to also as “black gold” and used by as a form of commodity money. Until well after the Middle age, virtually all of the black pepper found in Europe, the Middle East, and North Africa traveled there from India’s Malabar region. It was some part of the preciousness of these spices that led to the European efforts to find a sea route to India and consequently to the European Colonial occupation of the country as well as European discovery and colonization of America/s. Vietnam, Indonesia, Malaysia, India, and Brazil are the main pepper producers in the world.",
     visitGov: "Visit Dept. of Export Agriculture",
@@ -31,12 +36,16 @@ const translations = {
     camera: "ඡායාරූපයක් ගන්න",
     gallery: "ගැලරියෙන් තෝරන්න",
     cancel: "අවලංගු කරන්න",
+    close: "වසන්න",
     history: "ඉතිහාසය",
     info: "තොරතුරු",
     profile: "ගිණුම",
     home: "මුල් පිටුව",
     language: "භාෂාව",
     sriLankaPepper: "ගම්මිරිස්",
+    varietiesTitle: "ශ්‍රී ලංකාවේ ප්‍රභේද සහ ඉතිහාසය",
+    // The Long Description (Translated)
+    varietiesLongDesc: "කළු ගම්මිරිස්වල සම්භවය ඉන්දියාවේ මලබාර් වෙරළ තීරය යැයි විශ්වාස කෙරුණද, ශ්‍රී ලංකාව ද වන ගම්මිරිස් වර්ග රාශියකට නිවහනකි. ශ්‍රී ලංකාවේ දක්නට ලැබෙන P. nigrum L. හි විශාල ජානමය විචල්‍යතාවය සහ ගම්මිරිස් වන වගා ඥාතීන් සිටීම සලකා බලන විට ශ්‍රී ලංකාව ද ගම්මිරිස්වල සම්භවය වූ ස්ථානයක් බව විශ්වාස කෙරේ. වාණිජ කළු ගම්මිරිස් වෙළඳාම ආරම්භයේ සිටම සමහර වාණිජ කළු ගම්මිරිස් ප්‍රභේද ශ්‍රී ලංකාවට ද හඳුන්වා දී ඇත. ඉන්දියාවෙන් 'පැණියූර්-1' සහ මැලේසියාවෙන් 'කුචින්' යන ඉහළ අස්වැන්නක් ලබා දෙන ගම්මිරිස් වගාවන් 1970 දශකයේ දී හඳුන්වා දුන් නමුත් MB12 සහ GK 49 යනු කළු ගම්මිරිස් වගාකරුවන් අතර ජනප්‍රිය ඉහළ අස්වැන්නක් සහ උසස් තත්ත්වයේ දේශීය තේරීම් වේ. අපනයන කෘෂිකර්ම දෙපාර්තමේන්තුව විසින් මෑතකදී නව දෙමුහුන් වර්ග තුනක් හඳුන්වා දී ඇත - ඩිංගි රාළ, කොහුකුඹුරේ රාළ සහ බූටාවේ රාළ.",
     infoDesc:
       'ගම්මිරිස් ලෝකයේ බහුලව භාවිතා වන කුළුබඩු වර්ගයක් වන අතර එය "කුළුබඩු වල රජු" ලෙස හැඳින්වේ. ගම්මිරිස් වගාව දකුණු ආසියාවට ආවේණික වන අතර ඓතිහාසික වාර්තාවලින් හෙළි වන්නේ ගම්මිරිස් දකුණු ඉන්දියාවේ ආරම්භ වූ බවයි. ගම්මිරිස් යනු බොහෝ විට "කළු රත්තරන්" ලෙසද හඳුන්වනු ලබන ඉතා වටිනා වෙළඳ භාණ්ඩයක් වූ අතර එය වෙළඳ භාණ්ඩ මුදල් ආකාරයක් ලෙස භාවිතා කරන ලදී. මධ්‍යතන යුගයෙන් බොහෝ කලකට පසු, යුරෝපයේ, මැදපෙරදිග සහ උතුරු අප්‍රිකාවේ දක්නට ලැබුණු කළු ගම්මිරිස් සියල්ලම පාහේ ඉන්දියාවේ මලබාර් ප්‍රදේශයෙන් එහි ගමන් කළේය. මෙම කුළුබඩු වල වටිනාකමේ කොටසක් නිසා ඉන්දියාවට මුහුදු මාර්ගයක් සොයා ගැනීමට යුරෝපීයයන් දැරූ උත්සාහයට සහ එහි ප්‍රතිඵලයක් ලෙස රට යුරෝපීය යටත් විජිතකරණයට මෙන්ම ඇමරිකාව/රටවල් සොයා ගැනීමට සහ යටත් විජිතකරණයට හේතු විය. වියට්නාමය, ඉන්දුනීසියාව, මැලේසියාව, ඉන්දියාව සහ බ්‍රසීලය ලෝකයේ ප්‍රධාන ගම්මිරිස් නිෂ්පාදකයින් වේ.',
     visitGov: "අපනයන කෘෂිකර්ම දෙපාර්තමේන්තුව",
