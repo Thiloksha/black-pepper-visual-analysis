@@ -1,35 +1,63 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { LanguageProvider, useLanguage } from '../../components/context/LanguageContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'; 
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function TabLayout() {
+  const { t } = useLanguage();
+  const insets = useSafeAreaInsets(); // 2. Get the safe area dimensions
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarActiveTintColor: '#2E7D32',
+        tabBarInactiveTintColor: '#888',
+        tabBarStyle: { 
+          // 3. Dynamically adjust height: 60px base + the height of system buttons
+          height: 60 + insets.bottom, 
+          // 4. Add padding so icons don't touch the system buttons
+          paddingBottom: insets.bottom + 5, 
+          paddingTop: 5,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: t.home,
+          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="info"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: t.info,
+          tabBarIcon: ({ color }) => <Ionicons name="leaf" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: t.history,
+          tabBarIcon: ({ color }) => <Ionicons name="time" size={24} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: t.profile,
+          tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
         }}
       />
     </Tabs>
+  );
+}
+
+export default function Layout() {
+  return (
+    <LanguageProvider>
+      <TabLayout />
+    </LanguageProvider>
   );
 }
