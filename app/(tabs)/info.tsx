@@ -78,7 +78,7 @@ export default function InfoScreen() {
         <View style={{height: 40}} /> 
       </ScrollView>
 
-      {/* 4. The Modal (Popup Page) */}
+      {/*The Modal (Popup Page) */}
       <Modal
         animationType="slide"
         transparent={true}
