@@ -60,6 +60,31 @@ export default function HomeScreen() {
     setLoading(true);
     setResult(null);
 
+    // --- DEMO MODE START ---
+    // Instead of calling the real server, we simulate a delay and return a fake result.
+    
+    setTimeout(() => {
+      //  Pick a random variety to make it look real
+      const mockVarieties = [
+        { class: "dingirala", confidence: "98.5%" },
+        { class: "bootawe", confidence: "96.2%" },
+        { class: "kohukuburerala", confidence: "94.8%" }
+      ];
+      const randomResult = mockVarieties[Math.floor(Math.random() * mockVarieties.length)];
+
+      //  Set the result
+      setResult(randomResult);
+      
+      //  Save to history so that feature works too
+      saveToHistory(randomResult, uri);
+      
+      //  Stop loading
+      setLoading(false);
+    }, 2500); // Wait 2.5 seconds to simulate "Thinking..."
+    
+    // --- DEMO MODE END ---
+
+    /* // REAL BACKEND CODE (Keep this commented out for the demo)
     const formData = new FormData();
     // @ts-ignore
     formData.append("file", { uri: uri, name: "leaf.jpg", type: "image/jpeg" });
@@ -75,6 +100,7 @@ export default function HomeScreen() {
     } finally {
       setLoading(false);
     }
+    */
   };
 
   const pickImage = async (useCamera: boolean) => {
@@ -89,7 +115,7 @@ export default function HomeScreen() {
     } else {
       result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        
+
         aspect: [1, 1],
         quality: 1,
       });
