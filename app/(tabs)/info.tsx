@@ -35,7 +35,7 @@ export default function InfoScreen() {
           <Text style={styles.header}>{t.sriLankaPepper}</Text>
           <Text style={styles.text}>{t.infoDesc}</Text>
 
-          <Text style={styles.subHeader}>Common Varieties:</Text>
+          <Text style={styles.subHeader}>Sri Lankan Varieties:</Text>
           
           <View style={styles.listItem}>
             <Ionicons name="leaf-outline" size={18} color="#2E7D32" />
@@ -52,7 +52,7 @@ export default function InfoScreen() {
 
           <TouchableOpacity
             style={styles.linkBtn}
-            onPress={() => Linking.openURL("http://www.dea.gov.lk/")}
+            onPress={() => Linking.openURL("https://dea.gov.lk/")}
           >
             <Ionicons name="globe-outline" size={20} color="white" />
             <Text style={styles.linkText}>{t.visitGov}</Text>
