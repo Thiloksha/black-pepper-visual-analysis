@@ -205,7 +205,6 @@ export default function HomeScreen() {
 
             <Text style={styles.label}>{t.variety}</Text>
             
-            {/* --- UPDATED: Uses the helper function to show English/Sinhala correctly --- */}
             <Text style={styles.varietyName}>{getDisplayVariety(result.class)}</Text>
 
             <View style={styles.statRow}>
@@ -290,7 +289,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#F5F7FA", // Light grey-blue for modern look
+    backgroundColor: "#F5F7FA", 
   },
   
   // Splash Screen
@@ -392,7 +391,7 @@ const styles = StyleSheet.create({
       width: '100%',
       aspectRatio: 1,
       marginBottom: 25,
-      padding: 10, // Space for corners
+      padding: 10, 
   },
   scannerCard: {
     flex: 1,

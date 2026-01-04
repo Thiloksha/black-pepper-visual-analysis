@@ -42,7 +42,7 @@ export default function HistoryScreen() {
     return rawClass.toUpperCase();
   };
 
-  // Optional: Function to clear history (good for testing)
+  // Function to clear history (good for testing)
   const clearHistory = async () => {
     await AsyncStorage.removeItem('scanHistory');
     setHistory([]);
@@ -75,7 +75,6 @@ export default function HistoryScreen() {
             <View style={styles.card}>
               <Image source={{ uri: item.image }} style={styles.thumb} />
               <View style={styles.info}>
-                {/* USE THE HELPER FUNCTION HERE */}
                 <Text style={styles.variety}>{getDisplayVariety(item.class)}</Text>
                 
                 <Text style={styles.date}>
