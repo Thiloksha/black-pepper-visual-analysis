@@ -24,7 +24,7 @@ export default function InfoScreen() {
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      {/* 3. The ScrollView sits ON TOP of the image */}
+      {/* ScrollView sits ON TOP of the image */}
       <ScrollView 
         contentContainerStyle={[
           styles.scrollContent, 
