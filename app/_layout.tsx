@@ -1,24 +1,18 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import React from 'react';
+import { LanguageProvider } from '../components/context/LanguageContext';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+    // We wrap the ENTIRE app here so every page works
+    <LanguageProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        {/* The Tabs (Home, History, etc.) */}
+        <Stack.Screen name="(tabs)" />
+        
+        {/* Your New Page */}
+        <Stack.Screen name="varieties" />
       </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    </LanguageProvider>
   );
 }

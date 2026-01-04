@@ -1,12 +1,12 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { LanguageProvider, useLanguage } from '../../components/context/LanguageContext';
-import { useSafeAreaInsets } from 'react-native-safe-area-context'; 
+import { useLanguage } from '../../components/context/LanguageContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-function TabLayout() {
+export default function TabLayout() {
   const { t } = useLanguage();
-  const insets = useSafeAreaInsets(); // 2. Get the safe area dimensions
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -15,9 +15,7 @@ function TabLayout() {
         tabBarActiveTintColor: '#2E7D32',
         tabBarInactiveTintColor: '#888',
         tabBarStyle: { 
-          // 3. Dynamically adjust height: 60px base + the height of system buttons
           height: 60 + insets.bottom, 
-          // 4. Add padding so icons don't touch the system buttons
           paddingBottom: insets.bottom + 5, 
           paddingTop: 5,
         },
@@ -51,13 +49,5 @@ function TabLayout() {
         }}
       />
     </Tabs>
-  );
-}
-
-export default function Layout() {
-  return (
-    <LanguageProvider>
-      <TabLayout />
-    </LanguageProvider>
   );
 }
