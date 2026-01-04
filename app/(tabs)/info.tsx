@@ -19,7 +19,6 @@ export default function InfoScreen() {
   const bgImage = require('../../assets/images/background.jpg');
 
   return (
-    //  Wrap everything in ImageBackground
     <ImageBackground 
       source={bgImage} 
       style={styles.backgroundImage}
