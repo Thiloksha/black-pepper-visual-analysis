@@ -14,7 +14,7 @@ const translations = {
     profile: "Profile",
     home: "Home",
     language: "Language",
-    sriLankaPepper: "Ceylon Black Pepper",
+    sriLankaPepper: "Black Pepper",
     infoDesc:
       "Pepper is the most widely used spice in the world and known as “King of the Spices”. Pepper crop is native to South Asia and historical records reveal that pepper is originated in South India. Peppercorns were a much-prized trade good often referred to also as “black gold” and used by as a form of commodity money. Until well after the Middle age, virtually all of the black pepper found in Europe, the Middle East, and North Africa traveled there from India’s Malabar region. It was some part of the preciousness of these spices that led to the European efforts to find a sea route to India and consequently to the European Colonial occupation of the country as well as European discovery and colonization of America/s. Vietnam, Indonesia, Malaysia, India, and Brazil are the main pepper producers in the world.",
     visitGov: "Visit Dept. of Export Agriculture",
@@ -36,7 +36,7 @@ const translations = {
     profile: "ගිණුම",
     home: "මුල් පිටුව",
     language: "භාෂාව",
-    sriLankaPepper: "ලංකා ගම්මිරිස්",
+    sriLankaPepper: "ගම්මිරිස්",
     infoDesc:
       'ගම්මිරිස් ලෝකයේ බහුලව භාවිතා වන කුළුබඩු වර්ගයක් වන අතර එය "කුළුබඩු වල රජු" ලෙස හැඳින්වේ. ගම්මිරිස් වගාව දකුණු ආසියාවට ආවේණික වන අතර ඓතිහාසික වාර්තාවලින් හෙළි වන්නේ ගම්මිරිස් දකුණු ඉන්දියාවේ ආරම්භ වූ බවයි. ගම්මිරිස් යනු බොහෝ විට "කළු රත්තරන්" ලෙසද හඳුන්වනු ලබන ඉතා වටිනා වෙළඳ භාණ්ඩයක් වූ අතර එය වෙළඳ භාණ්ඩ මුදල් ආකාරයක් ලෙස භාවිතා කරන ලදී. මධ්‍යතන යුගයෙන් බොහෝ කලකට පසු, යුරෝපයේ, මැදපෙරදිග සහ උතුරු අප්‍රිකාවේ දක්නට ලැබුණු කළු ගම්මිරිස් සියල්ලම පාහේ ඉන්දියාවේ මලබාර් ප්‍රදේශයෙන් එහි ගමන් කළේය. මෙම කුළුබඩු වල වටිනාකමේ කොටසක් නිසා ඉන්දියාවට මුහුදු මාර්ගයක් සොයා ගැනීමට යුරෝපීයයන් දැරූ උත්සාහයට සහ එහි ප්‍රතිඵලයක් ලෙස රට යුරෝපීය යටත් විජිතකරණයට මෙන්ම ඇමරිකාව/රටවල් සොයා ගැනීමට සහ යටත් විජිතකරණයට හේතු විය. වියට්නාමය, ඉන්දුනීසියාව, මැලේසියාව, ඉන්දියාව සහ බ්‍රසීලය ලෝකයේ ප්‍රධාන ගම්මිරිස් නිෂ්පාදකයින් වේ.',
     visitGov: "අපනයන කෘෂිකර්ම දෙපාර්තමේන්තුව",
