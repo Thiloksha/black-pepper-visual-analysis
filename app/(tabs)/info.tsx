@@ -31,7 +31,6 @@ export default function InfoScreen() {
           { paddingTop: insets.top + 20 }
         ]}
       >
-        {/* A "Glass" Card to make text readable */}
         <View style={styles.glassCard}>
           <Text style={styles.header}>{t.sriLankaPepper}</Text>
           <Text style={styles.text}>{t.infoDesc}</Text>
