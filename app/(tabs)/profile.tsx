@@ -17,14 +17,14 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      {/* 1. GREEN HEADER BACKGROUND */}
+      {/* HEADER BACKGROUND */}
       <View style={[styles.headerBg, { paddingTop: insets.top }]}>
         <Text style={styles.headerTitle}>{t.profile}</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         
-        {/* 2. FLOATING PROFILE CARD */}
+        {/* FLOATING PROFILE CARD */}
         <View style={styles.profileCard}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
@@ -48,7 +48,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* 3. SETTINGS SECTION */}
+        {/* SETTINGS SECTION */}
         <Text style={styles.sectionHeader}>SETTINGS</Text>
         
         <View style={styles.menuCard}>
@@ -92,7 +92,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* 4. SUPPORT SECTION */}
+        {/* SUPPORT SECTION */}
         <Text style={styles.sectionHeader}>SUPPORT</Text>
         <View style={styles.menuCard}>
             
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   // Header
   headerBg: {
     backgroundColor: '#2E7D32',
-    paddingBottom: 50, // Extra space for overlapping card
+    paddingBottom: 50, 
     paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomLeftRadius: 30,
